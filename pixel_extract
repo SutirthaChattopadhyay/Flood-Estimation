@@ -1,0 +1,40 @@
+from PIL import Image
+import csv
+
+img=r"E:\Only-CO-Lang\Python Code\CODE-py\Flood Ai\mine\srm\band04_srm.tif"
+def ext_pix(img):
+    try:
+        # Open the .tiff image using Pillow
+        image = Image.open(img)
+
+        # Get the pixel data from the image
+        pixel_data = list(image.getdata())
+
+        # Convert the flat list of pixel values to a 2D representation (rows x columns)
+        width, height = image.size
+        pixel_matrix = [pixel_data[i * width:(i + 1) * width] for i in range(height)]
+
+        return pixel_matrix
+    except Exception as e:
+        print("Error:", e)
+        return None
+
+def save_pixels_to_csv(pixel_matrix, output_file):
+    try:
+        with open(output_file, 'w', newline='') as csvfile:
+            csv_writer = csv.writer(csvfile)
+            csv_writer.writerows(pixel_matrix)
+        print("Pixels saved to CSV successfully.")
+    except Exception as e:
+        print("Error:", e)
+
+# Example usage
+if __name__ == "__main__":
+    tiff_image_path = r"E:\Only-CO-Lang\Python Code\CODE-py\Flood Ai\mine\srm\band04_srm.tif"
+    csv_output_file = r"E:\Only-CO-Lang\Python Code\CODE-py\Flood Ai\mine\new.csv"
+
+    extracted_pixels = ext_pix(tiff_image_path)
+    if extracted_pixels:
+        save_pixels_to_csv(extracted_pixels, csv_output_file)
+    else:
+        print("Failed to extract pixels.")
